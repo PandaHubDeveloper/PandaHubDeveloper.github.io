@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PandaHub.Dev - Premium Lua Scripts</title>
+    <meta name="description"
+        content="PandaHub.Dev is the ultimate destination for premium Roblox Lua scripts, hubs, and tools.">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Firebase SDK (Version 8) -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    <!-- CSS -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <!-- Background Elements for Animations -->
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+
+    <!-- Navigation -->
+    <nav class="navbar hidden">
+        <div class="nav-container">
+            <a href="#" class="logo">
+                <i class="fa-solid fa-panda-face"></i> PandaHub<span>.Dev</span>
+            </a>
+            <div class="nav-links">
+                <a href="#home">Home</a>
+                <a href="#scripts">Scripts</a>
+                <a href="#about">About</a>
+                <a href="#admin" id="nav-admin" style="display: none; color: var(--accent);"><i
+                        class="fa-solid fa-screwdriver-wrench"></i> Admin</a>
+                <span class="live-users-badge"><i class="fa-solid fa-users"></i> Live: <strong
+                        id="live-user-count">0</strong></span>
+                <a href="https://github.com/YourGitHubUsername" target="_blank" class="btn-outline">
+                    <i class="fa-brands fa-github"></i> GitHub
+                </a>
+            </div>
+            <div class="mobile-menu-btn">
+                <i class="fa-solid fa-bars"></i>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero hidden">
+        <div class="hero-content">
+            <div class="badge">🔥 Best Scripts for Roblox</div>
+            <h1 class="hero-title">Welcome to <span class="highlight">PandaHub</span><br>The Ultimate Lua Experience.
+            </h1>
+            <p class="hero-subtitle">High-quality, undetectable, and completely automated Roblox Lua scripts developed
+                by PandaHub. Smooth UI, zero lag, max performance.</p>
+            <div class="hero-buttons">
+                <a href="#scripts" class="btn-primary">
+                    Explore Scripts <i class="fa-solid fa-arrow-down"></i>
+                </a>
+                <a href="https://discord.gg/yourdiscord" target="_blank" class="btn-secondary">
+                    <i class="fa-brands fa-discord"></i> Join Discord
+                </a>
+            </div>
+        </div>
+        <div class="hero-image">
+            <div class="glass-card hero-glass-preview">
+                <div class="card-header">
+                    <div class="traffic-lights">
+                        <span></span><span></span><span></span>
+                    </div>
+                    <span class="file-name">loader.lua</span>
+                </div>
+                <div class="card-body">
+                    <pre><code><span class="keyword">local</span> PandaHub = <span class="keyword">require</span>(<span class="string">"PandaHub"</span>)
+
+<span class="comment">-- Initialize the ultimate script hub</span>
+PandaHub:Initialize({
+    Theme = <span class="string">"BambooGreen"</span>,
+    AutoInject = <span class="boolean">true</span>,
+    Bypass = <span class="string">"Maximum"</span>
+})
+
+<span class="function">print</span>(<span class="string">"Successfully authenticated as: PandaHubUser"</span>)
+</code></pre>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Scripts Section -->
+    <section id="scripts" class="scripts-section">
+        <div class="section-header hidden">
+            <h2 class="section-title">My Scripts</h2>
+            <p class="section-desc">Browse through my latest projects and scripts.</p>
+        </div>
+
+        <div class="scripts-grid" id="scripts-grid">
+            <p style="text-align: center; width: 100%; grid-column: 1 / -1; color: var(--text-secondary);">Loading
+                scripts from database <i class="fa-solid fa-spinner fa-spin"></i></p>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about-section hidden">
+        <div class="about-container glass-card">
+            <div class="about-content">
+                <h2>About <span class="highlight">Us</span></h2>
+                <p>Hello! We are the team behind PandaHub, passionate Lua Developers. We specialize in reverse
+                    engineering, UI design,
+                    and game manipulation. Welcome to PandaHub.Dev, where we share the tools we build.</p>
+                <div class="stats">
+                    <div class="stat-item">
+                        <h4 class="counter" id="stat-scripts-made" data-target="0">0</h4>
+                        <p>Scripts Made</p>
+                    </div>
+                    <div class="stat-item">
+                        <h4 class="counter" id="stat-happy-users" data-target="0">0</h4>
+                        <p>Total Views</p>
+                    </div>
+                    <div class="stat-item">
+                        <h4 class="counter" id="stat-online-users" data-target="0">0</h4>
+                        <p>Online Users</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Admin Section (Hidden by default) -->
+    <section id="admin" class="admin-section" style="display: none;">
+        <div class="section-header">
+            <h2 class="section-title"><i class="fa-solid fa-screwdriver-wrench"></i> PandaHub Admin</h2>
+            <p class="section-desc">Manage your scripts directly from here.</p>
+        </div>
+
+        <div class="admin-grid">
+            <!-- Add New Script Form -->
+            <div class="glass-card admin-form-card">
+                <h3><i class="fa-solid fa-plus-circle"></i> Add New Script</h3>
+                <form id="add-script-form">
+                    <div class="form-group">
+                        <label>Script Title *</label>
+                        <input type="text" id="script-title" required placeholder="e.g. Silent Aim v16">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Loadstring *</label>
+                        <input type="text" id="script-loadstring" required
+                            placeholder='loadstring(game:HttpGet("..."))()'>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Short Description (Optional)</label>
+                        <textarea id="script-desc" placeholder="Leave empty for no description..." rows="2"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Tags (Optional)</label>
+                        <input type="text" id="script-tags" placeholder="e.g. Rivals, Da Hood (comma separated)">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Roblox Game Link (Optional)</label>
+                        <input type="url" id="script-game-url"
+                            placeholder="e.g. https://www.roblox.com/games/8750997147/Rivals">
+                        <small>Auto-fetches game thumbnail.</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Direct Image URL (Optional)</label>
+                        <input type="url" id="script-img" placeholder="Overrides game link thumbnail.">
+                    </div>
+
+                    <button type="submit" id="submit-script-btn" class="btn-primary w-100">
+                        <i class="fa-solid fa-upload"></i> Publish Script
+                    </button>
+                    <p id="form-msg" class="msg"></p>
+                </form>
+            </div>
+
+            <!-- Manage Scripts List -->
+            <div class="glass-card admin-list-card">
+                <h3><i class="fa-solid fa-list"></i> Managed Scripts</h3>
+                <div id="admin-scripts-list" class="scripts-list">
+                    <p class="loading-text">Loading...</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content hidden">
+            <div class="footer-logo">
+                <i class="fa-solid fa-panda-face"></i> PandaHub<span>.Dev</span>
+            </div>
+            <p>Built with ❤️ by PandaHub Team. Hosted on GitHub Pages.</p>
+            <div class="footer-socials">
+                <a href="#"><i class="fa-brands fa-github"></i></a>
+                <a href="#"><i class="fa-brands fa-discord"></i></a>
+                <a href="#"><i class="fa-brands fa-youtube"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Secret Admin Login Modal -->
+    <div id="secret-login-modal" class="admin-overlay" style="display: none;">
+        <div class="glass-card login-card">
+            <h2><i class="fa-solid fa-lock" style="color: var(--accent);"></i> Secret Area</h2>
+            <p>Admin password required.</p>
+            <input type="password" id="admin-pass" placeholder="Password...">
+            <div style="display: flex; gap: 10px;">
+                <button id="login-btn" class="btn-primary" style="flex: 1;">Login</button>
+                <button id="close-login-btn" class="btn-secondary">Close</button>
+            </div>
+            <p id="login-error" class="error-msg"></p>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="toast">
+        <i class="fa-solid fa-check-circle"></i> Loadstring copied to clipboard!
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

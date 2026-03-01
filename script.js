@@ -1,3 +1,132 @@
+const translations = {
+    "en": {
+        "nav_home": "Home",
+        "nav_scripts": "Scripts",
+        "nav_about": "About",
+        "nav_admin": "Admin",
+        "hero_badge": "🔥 Best Scripts for Roblox",
+        "hero_title": "Welcome to <span class='highlight'>PandaHub</span><br>The Ultimate Lua Experience.",
+        "hero_subtitle": "High-quality, undetectable, and completely automated Roblox Lua scripts developed by PandaHub. Smooth UI, zero lag, max performance.",
+        "hero_btn_scripts": "Explore Scripts",
+        "hero_btn_discord": "Join Discord",
+        "scripts_title": "My Scripts",
+        "scripts_desc": "Browse through my latest projects and scripts.",
+        "scripts_loading": "Loading scripts from database",
+        "about_title": "About <span class='highlight'>Us</span>",
+        "about_desc": "Hello! We are the team behind PandaHub, passionate Lua Developers. We specialize in reverse engineering, UI design, and game manipulation. Welcome to PandaHub.Dev, where we share the tools we build.",
+        "stat_scripts": "Scripts Made",
+        "stat_views": "Total Views",
+        "stat_online": "Online Users",
+        "admin_title": "PandaHub Admin",
+        "admin_desc": "Manage your scripts directly from here.",
+        "admin_add_script_title": "Add New Script",
+        "admin_label_title": "Script Title *",
+        "admin_placeholder_title": "e.g. Silent Aim v16",
+        "admin_label_loadstring": "Loadstring *",
+        "admin_label_desc": "Short Description (Optional)",
+        "admin_placeholder_desc": "Leave empty for no description...",
+        "admin_label_tags": "Tags (Optional)",
+        "admin_placeholder_tags": "e.g. Rivals, Da Hood (comma separated)",
+        "admin_label_game_link": "Roblox Game Link (Optional)",
+        "admin_small_game_link": "Auto-fetches game thumbnail.",
+        "admin_label_img": "Direct Image URL (Optional)",
+        "admin_placeholder_img": "Overrides game link thumbnail.",
+        "admin_btn_publish": "Publish Script",
+        "admin_manage_title": "Managed Scripts",
+        "footer_credits": "Built with ❤️ by PandaHub Team. Hosted on GitHub Pages.",
+        "modal_title": "Secret Area",
+        "modal_desc": "Admin password required.",
+        "modal_placeholder_pass": "Password...",
+        "modal_btn_login": "Login",
+        "modal_btn_close": "Close",
+        "toast_copied": "Loadstring copied to clipboard!"
+    },
+    "tr": {
+        "nav_home": "Ana Sayfa",
+        "nav_scripts": "Scriptler",
+        "nav_about": "Hakkımızda",
+        "nav_admin": "Yönetici",
+        "hero_badge": "🔥 Roblox İçin En İyi Scriptler",
+        "hero_title": "<span class='highlight'>PandaHub</span>'a Hoş Geldiniz<br>Nihai Lua Deneyimi.",
+        "hero_subtitle": "PandaHub tarafından geliştirilen yüksek kaliteli, tespit edilemeyen ve tam otomatik Roblox Lua scriptleri. Akıcı arayüz, sıfır gecikme, maksimum performans.",
+        "hero_btn_scripts": "Scriptleri Keşfet",
+        "hero_btn_discord": "Discord'a Katıl",
+        "scripts_title": "Scriptlerim",
+        "scripts_desc": "En son projelere ve scriptlere göz atın.",
+        "scripts_loading": "Veritabanından scriptler yükleniyor",
+        "about_title": "Hakkımız<span class='highlight'>da</span>",
+        "about_desc": "Merhaba! Biz PandaHub ekibiyiz, tutkulu Lua Geliştiricileriyiz. Tersine mühendislik, arayüz tasarımı ve oyun manipülasyonu üzerine uzmanız. Yaptığımız araçları paylaştığımız PandaHub.Dev'e hoş geldiniz.",
+        "stat_scripts": "Üretilen Script",
+        "stat_views": "Toplam Görüntülenme",
+        "stat_online": "Aktif Kullanıcı",
+        "admin_title": "PandaHub Yönetim",
+        "admin_desc": "Scriptlerinizi direkt buradan yönetin.",
+        "admin_add_script_title": "Yeni Script Ekle",
+        "admin_label_title": "Script Başlığı *",
+        "admin_placeholder_title": "Örn. Silent Aim v16",
+        "admin_label_loadstring": "Loadstring (Çalıştırma Kodu) *",
+        "admin_label_desc": "Kısa Açıklama (İsteğe Bağlı)",
+        "admin_placeholder_desc": "Açıklama yoksa boş bırakın...",
+        "admin_label_tags": "Etiketler (İsteğe Bağlı)",
+        "admin_placeholder_tags": "Örn. Rivals, Da Hood (virgülle ayırarak)",
+        "admin_label_game_link": "Roblox Oyun Linki (İsteğe Bağlı)",
+        "admin_small_game_link": "Oyun resmini otomatik çeker.",
+        "admin_label_img": "Direkt Resim URL (İsteğe Bağlı)",
+        "admin_placeholder_img": "Oyun resmi yerine bunu kullanır.",
+        "admin_btn_publish": "Scripti Yayınla",
+        "admin_manage_title": "Yönetilen Scriptler",
+        "footer_credits": "PandaHub Ekibi tarafından ❤️ ile yapıldı. GitHub Pages'te barındırılmaktadır.",
+        "modal_title": "Gizli Bölge",
+        "modal_desc": "Yönetici şifresi gerekiyor.",
+        "modal_placeholder_pass": "Şifre...",
+        "modal_btn_login": "Giriş Yap",
+        "modal_btn_close": "Kapat",
+        "toast_copied": "Loadstring panoya kopyalandı!"
+    },
+    "de": {
+        "nav_home": "Startseite",
+        "nav_scripts": "Skripte",
+        "nav_about": "Über uns",
+        "nav_admin": "Admin",
+        "hero_badge": "🔥 Beste Skripte für Roblox",
+        "hero_title": "Willkommen bei <span class='highlight'>PandaHub</span><br>Das ultimative Lua-Erlebnis.",
+        "hero_subtitle": "Hochwertige, unauffindbare und vollautomatisierte Roblox Lua Skripte, entwickelt von PandaHub. Reibungslose Benutzeroberfläche, null Verzögerung, maximale Leistung.",
+        "hero_btn_scripts": "Skripte entdecken",
+        "hero_btn_discord": "Discord beitreten",
+        "scripts_title": "Meine Skripte",
+        "scripts_desc": "Durchstöbern Sie meine neuesten Projekte und Skripte.",
+        "scripts_loading": "Lade Skripte aus der Datenbank",
+        "about_title": "Über <span class='highlight'>uns</span>",
+        "about_desc": "Hallo! Wir sind das Team hinter PandaHub, leidenschaftliche Lua-Entwickler. Wir sind spezialisiert auf Reverse Engineering, UI-Design und Spielmanipulation. Willkommen bei PandaHub.Dev, wo wir die Tools teilen, die wir bauen.",
+        "stat_scripts": "Erstellte Skripte",
+        "stat_views": "Gesamtaufrufe",
+        "stat_online": "Online-Benutzer",
+        "admin_title": "PandaHub-Verwaltung",
+        "admin_desc": "Verwalten Sie Ihre Skripte direkt von hier aus.",
+        "admin_add_script_title": "Neues Skript hinzufügen",
+        "admin_label_title": "Skript-Titel *",
+        "admin_placeholder_title": "z.B. Silent Aim v16",
+        "admin_label_loadstring": "Loadstring *",
+        "admin_label_desc": "Kurze Beschreibung (Optional)",
+        "admin_placeholder_desc": "Leer lassen für keine Beschreibung...",
+        "admin_label_tags": "Tags (Optional)",
+        "admin_placeholder_tags": "z.B. Rivals, Da Hood (kommagetrennt)",
+        "admin_label_game_link": "Roblox-Spiellink (Optional)",
+        "admin_small_game_link": "Ruft Spiel-Miniaturansicht automatisch ab.",
+        "admin_label_img": "Direkte Bild-URL (Optional)",
+        "admin_placeholder_img": "Überschreibt die Spiel-Miniaturansicht.",
+        "admin_btn_publish": "Skript veröffentlichen",
+        "admin_manage_title": "Verwaltete Skripte",
+        "footer_credits": "Mit ❤️ von PandaHub Team gebaut. Gehostet auf GitHub Pages.",
+        "modal_title": "Geheimer Bereich",
+        "modal_desc": "Admin-Passwort erforderlich.",
+        "modal_placeholder_pass": "Passwort...",
+        "modal_btn_login": "Anmelden",
+        "modal_btn_close": "Schließen",
+        "toast_copied": "Loadstring in die Zwischenablage kopiert!"
+    }
+};
+
 const firebaseConfig = {
     apiKey: "AIzaSyBmsI3pYbyWD9EPQIAOteFMGed3Xk7kev8",
     authDomain: "pandahubsite.firebaseapp.com",
@@ -20,6 +149,49 @@ try {
 const ADMIN_PASSWORD = "Panda";
 
 document.addEventListener('DOMContentLoaded', () => {
+    /* --- Language Logic --- */
+    let currentLang = localStorage.getItem('lang') || 'en';
+    const langBtns = document.querySelectorAll('.lang-btn');
+
+    function updateLanguage(lang) {
+        currentLang = lang;
+        localStorage.setItem('lang', lang);
+
+        document.querySelectorAll("[data-i18n]").forEach(el => {
+            const key = el.getAttribute("data-i18n");
+            if (translations[lang][key]) {
+                el.innerHTML = translations[lang][key];
+            }
+        });
+
+        document.querySelectorAll("[data-i18n-placeholder]").forEach(el => {
+            const key = el.getAttribute("data-i18n-placeholder");
+            if (translations[lang][key]) {
+                el.placeholder = translations[lang][key];
+            }
+        });
+
+        // Update active class on buttons
+        langBtns.forEach(btn => {
+            if (btn.getAttribute('data-lang') === lang) {
+                btn.classList.add('active');
+            } else {
+                btn.classList.remove('active');
+            }
+        });
+    }
+
+    langBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const selectedLang = btn.getAttribute('data-lang');
+            updateLanguage(selectedLang);
+        });
+    });
+
+    // Run once on load
+    updateLanguage(currentLang);
+
+
     /* --- Admin Secret Login Logic --- */
     let logoClicks = 0;
     let clickTimer;

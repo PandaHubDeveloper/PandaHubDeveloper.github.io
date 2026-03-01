@@ -18,11 +18,19 @@
     <!-- Firebase SDK (Version 8) -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-storage.js"></script>
+
+    <!-- Quill.js Rich Text Editor -->
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
+
     <!-- CSS -->
     <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
+    <!-- Custom Mouse Aura -->
+    <div class="cursor-aura"></div>
     <!-- Background Elements for Animations -->
     <div class="blob blob-1"></div>
     <div class="blob blob-2"></div>
@@ -168,10 +176,19 @@ PandaHub:Initialize({
                             placeholder='loadstring(game:HttpGet("..."))()'>
                     </div>
 
+                    <div class="form-group checkbox-group">
+                        <label class="switch">
+                            <input type="checkbox" id="script-needs-key">
+                            <span class="slider round"></span>
+                        </label>
+                        <span data-i18n="admin_label_key">Requires Key System</span>
+                    </div>
+
                     <div class="form-group">
-                        <label data-i18n="admin_label_desc">Short Description (Optional)</label>
-                        <textarea id="script-desc" placeholder="Leave empty for no description..."
-                            data-i18n-placeholder="admin_placeholder_desc" rows="2"></textarea>
+                        <label data-i18n="admin_label_desc">Description (Optional)</label>
+                        <div id="editor-container"
+                            style="height: 150px; background: rgba(0,0,0,0.2); color: #fff; border-color: rgba(255,255,255,0.1); border-radius: 0 0 10px 10px;">
+                        </div>
                     </div>
 
                     <div class="form-group">
@@ -188,9 +205,21 @@ PandaHub:Initialize({
                     </div>
 
                     <div class="form-group">
-                        <label data-i18n="admin_label_img">Direct Image URL (Optional)</label>
-                        <input type="url" id="script-img" placeholder="Overrides game link thumbnail."
-                            data-i18n-placeholder="admin_placeholder_img">
+                        <label data-i18n="admin_label_img">Upload Thumbnail (Optional)</label>
+                        <div class="upload-area" id="upload-area">
+                            <input type="file" id="script-img-upload" accept="image/png, image/jpeg, image/webp" hidden>
+                            <div class="upload-content">
+                                <i class="fa-solid fa-image"
+                                    style="font-size: 2rem; color: var(--text-secondary); margin-bottom: 10px;"></i>
+                                <p data-i18n="admin_upload_text">Choose image or drag and drop here</p>
+                                <small>16:9 aspect ratio • PNG, JPG, WEBP up to 5MB</small>
+                            </div>
+                        </div>
+                        <p id="upload-status"
+                            style="color: var(--accent); font-size: 0.9rem; margin-top: 5px; display: none;">
+                            Uploading...</p>
+                        <!-- Hidden input to store download URL after upload -->
+                        <input type="hidden" id="script-img-url">
                     </div>
 
                     <button type="submit" id="submit-script-btn" class="btn-primary w-100">
@@ -217,11 +246,6 @@ PandaHub:Initialize({
                 <i class="fa-solid fa-panda-face"></i> PandaHub<span>.Dev</span>
             </div>
             <p data-i18n="footer_credits">Built with ❤️ by PandaHub Team. Hosted on GitHub Pages.</p>
-            <div class="footer-socials">
-                <a href="#"><i class="fa-brands fa-github"></i></a>
-                <a href="#"><i class="fa-brands fa-discord"></i></a>
-                <a href="#"><i class="fa-brands fa-youtube"></i></a>
-            </div>
         </div>
     </footer>
 

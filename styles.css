@@ -41,6 +41,25 @@ body {
     position: relative;
 }
 
+/* Custom Cursor Aura */
+.cursor-aura {
+    width: 150px;
+    height: 150px;
+    background: radial-gradient(circle, rgba(46, 204, 113, 0.15) 0%, rgba(46, 204, 113, 0) 70%);
+    border-radius: 50%;
+    position: fixed;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    z-index: 9998;
+    transition: width 0.2s, height 0.2s, background 0.2s;
+}
+
+.cursor-aura.clicking {
+    width: 120px;
+    height: 120px;
+    background: radial-gradient(circle, rgba(46, 204, 113, 0.25) 0%, rgba(46, 204, 113, 0) 70%);
+}
+
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
     width: 10px;
@@ -619,6 +638,151 @@ h4 {
 }
 
 /* ============================
+   Forms & Admin UI
+   ============================ */
+
+/* The Switch - the box around the slider */
+.checkbox-group {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(255, 255, 255, 0.1);
+    -webkit-transition: .4s;
+    transition: .4s;
+    border: 1px solid var(--glass-border);
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 16px;
+    width: 16px;
+    left: 4px;
+    bottom: 3px;
+    background-color: var(--text-secondary);
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+input:checked+.slider {
+    background-color: var(--accent);
+}
+
+input:focus+.slider {
+    box-shadow: 0 0 1px var(--accent);
+}
+
+input:checked+.slider:before {
+    -webkit-transform: translateX(24px);
+    -ms-transform: translateX(24px);
+    transform: translateX(24px);
+    background-color: #fff;
+}
+
+/* Rounded sliders */
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+/* Quill Editor Overrides */
+.ql-toolbar.ql-snow {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: var(--glass-border);
+    border-radius: 10px 10px 0 0;
+}
+
+.ql-snow .ql-stroke {
+    stroke: var(--text-secondary);
+}
+
+.ql-snow .ql-fill {
+    fill: var(--text-secondary);
+}
+
+.ql-snow .ql-picker {
+    color: var(--text-secondary);
+}
+
+/* Drag & Drop Upload Area */
+.upload-area {
+    margin-top: 10px;
+    border: 2px dashed rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    padding: 30px;
+    text-align: center;
+    transition: var(--transition);
+    cursor: pointer;
+    background: rgba(0, 0, 0, 0.2);
+    position: relative;
+    overflow: hidden;
+}
+
+.upload-area:hover,
+.upload-area.dragover {
+    border-color: var(--accent);
+    background: rgba(46, 204, 113, 0.05);
+}
+
+.upload-content p {
+    color: var(--text-primary);
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.upload-content small {
+    color: var(--text-secondary);
+}
+
+.upload-area img.preview-img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 5;
+    opacity: 0.5;
+    transition: var(--transition);
+}
+
+.upload-area:hover img.preview-img {
+    opacity: 0.2;
+}
+
+/* Form General */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* ============================
    Footer
    ============================ */
 footer {
@@ -759,6 +923,13 @@ footer {
 @media (max-width: 600px) {
     .hero-title {
         font-size: 2.2rem;
+    }
+
+    /* Tag Styles for Key System */
+    .tag.key-tag {
+        background: rgba(255, 193, 7, 0.1);
+        border-color: #ffc107;
+        color: #ffc107;
     }
 
     .stats {

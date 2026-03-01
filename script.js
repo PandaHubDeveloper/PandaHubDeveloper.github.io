@@ -149,6 +149,32 @@ try {
 const ADMIN_PASSWORD = "Panda";
 
 document.addEventListener('DOMContentLoaded', () => {
+    /* --- Aura Cursor Logic --- */
+    const aura = document.querySelector('.cursor-aura');
+
+    document.addEventListener('mousemove', (e) => {
+        aura.style.left = e.clientX + 'px';
+        aura.style.top = e.clientY + 'px';
+    });
+
+    document.addEventListener('mousedown', () => aura.classList.add('clicking'));
+    document.addEventListener('mouseup', () => aura.classList.remove('clicking'));
+
+    // Hover effects on clickable elements
+    const clickables = document.querySelectorAll('a, button, input, .upload-area, .switch');
+    clickables.forEach(el => {
+        el.addEventListener('mouseenter', () => {
+            aura.style.width = '200px';
+            aura.style.height = '200px';
+            aura.style.background = 'radial-gradient(circle, rgba(46,204,113,0.3) 0%, rgba(46,204,113,0) 70%)';
+        });
+        el.addEventListener('mouseleave', () => {
+            aura.style.width = '150px';
+            aura.style.height = '150px';
+            aura.style.background = 'radial-gradient(circle, rgba(46,204,113,0.15) 0%, rgba(46,204,113,0) 70%)';
+        });
+    });
+
     /* --- Language Logic --- */
     let currentLang = localStorage.getItem('lang') || 'en';
     const langBtns = document.querySelectorAll('.lang-btn');
@@ -270,31 +296,149 @@ document.addEventListener('DOMContentLoaded', () => {
         loadAdminScripts();
 
         const form = document.getElementById('add-script-form');
+        const titleInput = document.getElementById('script-title');
+        const loadstringInput = document.getElementById('script-loadstring');
+        const tagsInput = document.getElementById('script-tags');
+        const gameUrlInput = document.getElementById('script-game-url');
+        const directImgInput = document.getElementById('script-img');
         const msgEl = document.getElementById('form-msg');
-        const submitBtn = document.getElementById('submit-script-btn');
+        const needsKeyToggle = document.getElementById('script-needs-key');
+        const uploadArea = document.getElementById('upload-area');
+        const fileInput = document.getElementById('script-img-upload');
+        const imgUrlHidden = document.getElementById('script-img-url');
+        const uploadStatus = document.getElementById('upload-status');
+
+        // Initialize Quill.js
+        var quill = new Quill('#editor-container', {
+            theme: 'snow',
+            placeholder: translations[currentLang]?.admin_placeholder_desc || 'Describe the features, how it works, and how people can use it...',
+            modules: {
+                toolbar: [
+                    [{ 'header': 2 }],
+                    ['bold', 'italic', 'strike'],
+                    [{ 'list': 'bullet' }, { 'list': 'ordered' }]
+                ]
+            }
+        });
+
+        /* --- Drag and Drop Image Upload --- */
+        if (uploadArea) {
+            uploadArea.addEventListener('click', () => fileInput.click());
+
+            uploadArea.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                uploadArea.classList.add('dragover');
+            });
+
+            uploadArea.addEventListener('dragleave', () => {
+                uploadArea.classList.remove('dragover');
+            });
+
+            uploadArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                uploadArea.classList.remove('dragover');
+                if (e.dataTransfer.files.length) {
+                    fileInput.files = e.dataTransfer.files;
+                    handleFileUpload(fileInput.files[0]);
+                }
+            });
+
+            fileInput.addEventListener('change', function () {
+                if (this.files.length) {
+                    handleFileUpload(this.files[0]);
+                }
+            });
+        }
+
+        function handleFileUpload(file) {
+            if (!file.type.match('image.*')) {
+                uploadStatus.innerText = "Sadece resim dosyaları yüklenebilir!";
+                uploadStatus.style.color = "red";
+                uploadStatus.style.display = "block";
+                return;
+            }
+            if (file.size > 5 * 1024 * 1024) {
+                uploadStatus.innerText = "Dosya boyutu 5MB'ı geçemez!";
+                uploadStatus.style.color = "red";
+                uploadStatus.style.display = "block";
+                return;
+            }
+
+            uploadStatus.innerText = "Uploading... 0%";
+            uploadStatus.style.color = "var(--accent)";
+            uploadStatus.style.display = "block";
+
+            // Preview local image immediately safely
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                let existingPreview = uploadArea.querySelector('.preview-img');
+                if (!existingPreview) {
+                    existingPreview = document.createElement('img');
+                    existingPreview.className = 'preview-img';
+                    uploadArea.appendChild(existingPreview);
+                }
+                existingPreview.src = e.target.result;
+            }
+            reader.readAsDataURL(file);
+
+            // Upload directly to Firebase Storage
+            const storageRef = firebase.storage().ref();
+            const fileName = Date.now() + "_" + file.name;
+            const fileRef = storageRef.child('script_images/' + fileName);
+
+            const uploadTask = fileRef.put(file);
+
+            uploadTask.on('state_changed',
+                (snapshot) => {
+                    const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                    uploadStatus.innerText = "Uploading... " + Math.round(progress) + "%";
+                },
+                (error) => {
+                    console.error("Upload error:", error);
+                    uploadStatus.innerText = "Upload failed!";
+                    uploadStatus.style.color = "red";
+                },
+                () => {
+                    uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
+                        uploadStatus.innerText = "Uploaded completely!";
+                        imgUrlHidden.value = downloadURL; // save link secretly
+                        setTimeout(() => uploadStatus.style.display = "none", 2000);
+                    });
+                }
+            );
+        }
 
         if (form && !form.dataset.initialized) {
             form.dataset.initialized = 'true';
             form.addEventListener('submit', async (e) => {
                 e.preventDefault();
 
+                msgEl.className = 'msg info';
+                msgEl.innerText = "Loading data...";
+
+                if (!database) {
+                    msgEl.className = 'msg error';
+                    msgEl.innerText = "Veritabanı bağlantısı kurulamadı.";
+                    return;
+                }
+
+                const submitBtn = document.getElementById('submit-script-btn');
                 submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> İşleniyor...';
                 submitBtn.disabled = true;
 
-                const title = document.getElementById('script-title').value;
-                const loadstring = document.getElementById('script-loadstring').value;
+                const title = titleInput.value.trim();
+                const loadstring = loadstringInput.value.trim();
+                // Get HTML content from Quill editor!
+                const desc = quill.root.innerHTML.trim() === '<p><br></p>' ? '' : quill.root.innerHTML.trim();
+                const tags = tagsInput.value.split(',').map(t => t.trim()).filter(t => t !== '');
+                const gameUrl = gameUrlInput.value.trim();
+                const hasKey = needsKeyToggle.checked;
 
-                // Optional Fields
-                const descVal = document.getElementById('script-desc').value;
-                const desc = descVal.trim() !== '' ? descVal : "No description provided.";
+                // Prioritize manually uploaded image, then direct URL, otherwise blank
+                let finalImageUrl = imgUrlHidden.value.trim() !== '' ? imgUrlHidden.value.trim() : directImgInput ? directImgInput.value.trim() : '';
 
-                const tagsVal = document.getElementById('script-tags').value;
-                const tags = tagsVal.trim() !== '' ? tagsVal.split(',').map(s => s.trim()) : ["Script"];
-
-                const gameUrl = document.getElementById('script-game-url').value;
-                let imgUrl = document.getElementById('script-img').value;
-
-                if (!imgUrl && gameUrl) {
+                // Otomatik Roblox Thumbnail Çekme
+                if (gameUrl && !finalImageUrl) {
                     const placeIdMatch = gameUrl.match(/games\/(\d+)/);
                     if (placeIdMatch && placeIdMatch[1]) {
                         const placeId = placeIdMatch[1];
@@ -304,38 +448,67 @@ document.addEventListener('DOMContentLoaded', () => {
                             const data = await res.json();
 
                             if (data && data.data && data.data.length > 0) {
-                                imgUrl = data.data[0].imageUrl;
+                                finalImageUrl = data.data[0].imageUrl;
                             }
                         } catch (err) {
                             console.log("Roblox resim çekme hatası:", err);
                         }
                     }
                 }
-
-                const newScriptRef = firebase.database().ref('scripts').push();
-                newScriptRef.set({
-                    title: title,
-                    desc: desc,
-                    tags: tags,
-                    loadstring: loadstring,
-                    imageUrl: imgUrl || "",
-                    timestamp: firebase.database.ServerValue.TIMESTAMP
-                }).then(() => {
-                    msgEl.innerText = "Script başarıyla paylaşıldı!";
-                    msgEl.className = "msg success";
-                    form.reset();
-                }).catch((err) => {
-                    msgEl.innerText = "Hata: " + err.message;
-                    msgEl.className = "msg error";
-                }).finally(() => {
-                    submitBtn.innerHTML = '<i class="fa-solid fa-upload"></i> Publish Script';
-                    submitBtn.disabled = false;
-                });
+                if (finalImageUrl) {
+                    publishScript(title, loadstring, desc, tags, finalImageUrl, hasKey);
+                } else {
+                    publishScript(title, loadstring, desc, tags, '', hasKey); // fail fallback
+                }
             });
         }
     }
 
+    function publishScript(title, loadstring, desc, tags, imageUrl, hasKey) {
+        const msgEl = document.getElementById('form-msg');
+        const submitBtn = document.getElementById('submit-script-btn');
+        const form = document.getElementById('add-script-form');
+        const imgUrlHidden = document.getElementById('script-img-url');
+        const uploadArea = document.getElementById('upload-area');
+        const needsKeyToggle = document.getElementById('script-needs-key');
+
+        // This is necessary since the quill editor is outside form
+        var quill = Quill.find(document.getElementById('editor-container'));
+
+        const scriptsRef = database.ref('scripts');
+        const newScriptRef = scriptsRef.push();
+
+        newScriptRef.set({
+            title: title,
+            loadstring: loadstring,
+            desc: desc,
+            tags: tags,
+            imageUrl: imageUrl,
+            timestamp: firebase.database.ServerValue.TIMESTAMP,
+            requiresKey: hasKey
+        }).then(() => {
+            msgEl.className = 'msg success';
+            msgEl.innerText = translations[currentLang]?.toast_copied ? "Yayınlandı!" : "Script başarıyla paylaşıldı!";
+            form.reset();
+            quill.root.innerHTML = ''; // Clear Editor
+            imgUrlHidden.value = ''; // clear hidden link
+            let preview = uploadArea.querySelector('.preview-img');
+            if (preview) preview.remove();
+            needsKeyToggle.checked = false;
+
+            setTimeout(() => { msgEl.innerText = ''; }, 3000);
+        }).catch((error) => {
+            msgEl.innerText = "Hata: " + error.message;
+            msgEl.className = "msg error";
+        }).finally(() => {
+            submitBtn.innerHTML = '<i class="fa-solid fa-upload"></i> Publish Script';
+            submitBtn.disabled = false;
+        });
+    }
+
     function loadAdminScripts() {
+        if (!database) return;
+
         const scriptsRef = database.ref('scripts');
         scriptsRef.on('value', (snapshot) => {
             const listDiv = document.getElementById('admin-scripts-list');
@@ -343,9 +516,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
             listDiv.innerHTML = '';
             const scripts = snapshot.val();
-
             if (!scripts) {
-                listDiv.innerHTML = '<p class="loading-text">Veritabanında henüz script yok.</p>';
+                listDiv.innerHTML = '<p class="msg info">Henüz yönetilecek script yok.</p>';
                 return;
             }
 
@@ -356,7 +528,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 item.className = 'admin-script-item';
                 item.innerHTML = `
                     <div>
-                        <h4>${script.title}</h4>
+                        <h4>${script.title} ${script.requiresKey ? '🔑' : ''}</h4>
                         <p>${script.tags.join(', ')}</p>
                     </div>
                     <button class="btn-delete" data-id="${script.id}">
@@ -531,9 +703,14 @@ document.addEventListener('DOMContentLoaded', () => {
                         <div class="icon-wrapper" style="position: relative; z-index: 2; margin-top: 30px;"><i class="fa-solid fa-code"></i></div>
                     </div>
                     <div class="script-card-content">
+                    <div class="script-card-content">
                         <h3>${script.title}</h3>
-                        <p>${script.desc}</p>
-                        <div class="script-tags">
+                        <div class="ql-editor" style="padding: 0; min-height: auto;">
+                            <!-- Quill HTML is rendered here directly. Since it was cleaned on submit, it should be ok -->
+                            ${script.desc}
+                        </div>
+                        <div class="script-tags" style="margin-top: 15px;">
+                            ${script.requiresKey ? `<span class="tag key-tag"><i class="fa-solid fa-key"></i> Key System</span>` : ''}
                             ${script.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
                         </div>
                     </div>
